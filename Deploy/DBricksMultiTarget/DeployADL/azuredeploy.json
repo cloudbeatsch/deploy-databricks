@@ -1,0 +1,106 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dlName": {
+      "defaultValue": "[concat('dl', uniqueString(resourceGroup().id))]",
+      "type": "string",
+      "metadata": {
+        "description": "Azure Data Lake account name"
+      }
+    },
+    "dlLocation": {
+      "defaultValue": "[resourceGroup().location]",
+      "type": "string",
+      "metadata": {
+        "description": "Azure Data Lake location"
+      }
+    },
+    "dlNewTier": {
+      "defaultValue": "Consumption",
+      "type": "string",
+      "metadata": {
+        "description": "Azure Data Lake pricing tier"
+      }
+    },
+    "spName": {
+      "type": "string",
+      "metadata": {
+        "description": "AD Service principal name"
+      }
+    },
+    "spDlFolder": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure Data Lake folder that will be granted rwx permission to the AD Service principal"
+      }
+    },
+    "kvName": {
+      "type": "string",
+      "metadata": {
+        "description": "Key Vault name where the AD Service Principal password is stored"
+      }      
+    },
+    "kvSubId": {
+      "type": "string",
+      "metadata": {
+        "description": "Key Vault subscription id where the AD Service Principal password is stored"
+      }
+    },
+    "kvSpSecretName": {
+      "type": "string",
+      "metadata": {
+        "description": "Key Vault secret name which references the AD Service Principal password"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2016-11-01",
+      "name": "[parameters('dlName')]",
+      "location": "[parameters('dlLocation')]",
+      "tags": {
+        "displayName":  "Azure Data Lake"
+      },
+      "type": "Microsoft.DataLakeStore/accounts",
+      "properties": {
+        "newTier": "[parameters('dlNewTier')]",
+        "encryptionState": "Enabled",
+        "encryptionConfig": {
+          "type": "ServiceManaged"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "dlName" : {
+      "value": "[parameters('dlName')]",
+      "type": "string"
+    },
+    "spName" : {
+      "value": "[parameters('spName')]",
+      "type": "string"
+    },
+    "spDlFolder" : {
+      "value": "[parameters('spDlFolder')]",
+      "type": "string"
+    },
+    "dlSubId": {
+      "value": "[subscription().subscriptionId]",
+      "type": "string"
+    },
+    "kvName" : {
+      "value": "[parameters('kvName')]",
+      "type": "string"
+    },
+    "kvSubId" : {
+      "value": "[parameters('kvSubId')]",
+      "type": "string"
+    },
+    "kvSpSecretName" : {
+      "value": "[parameters('kvSpSecretName')]",
+      "type": "string"
+    }
+  }
+}

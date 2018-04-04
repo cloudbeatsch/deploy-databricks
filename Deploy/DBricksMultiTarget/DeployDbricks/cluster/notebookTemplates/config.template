@@ -1,0 +1,17 @@
+# Databricks notebook source
+# Actual key values are set in the setKeys function so not to appear in the logs
+SERVICE_CLIENT_ID = "default"
+SERVICE_CREDENTIALS = "default"
+DIRECTORY_ID = "default"
+ADL_ACCOUNT_NAME = "default"
+
+def setKeys():
+  global SERVICE_CLIENT_ID
+  SERVICE_CLIENT_ID = "REPLACE_W_CLIENT_ID"
+  global SERVICE_CREDENTIALS
+  SERVICE_CREDENTIALS = "REPLACE_W_SERVICE_CREDENTIALS"
+  global DIRECTORY_ID
+  DIRECTORY_ID = "REPLACE_W_DIRECTORY_ID"
+  global ADL_ACCOUNT_NAME
+  ADL_ACCOUNT_NAME = "REPLACE_W_ADL_ACCOUNT_NAME"
+setKeys()

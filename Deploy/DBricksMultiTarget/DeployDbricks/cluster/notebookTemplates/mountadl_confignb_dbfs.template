@@ -1,0 +1,17 @@
+# Databricks notebook source
+# MAGIC %run __REPLACE_W_CONFIG_PATH__
+
+# COMMAND ----------
+
+configs = {"dfs.adls.oauth2.access.token.provider.type": "ClientCredential",
+           "dfs.adls.oauth2.client.id": SERVICE_CLIENT_ID,
+           "dfs.adls.oauth2.credential": SERVICE_CREDENTIALS,
+           "dfs.adls.oauth2.refresh.url": "https://login.microsoftonline.com/" + DIRECTORY_ID + "/oauth2/token"}
+dbutils.fs.mount(
+  source = "adl://" + ADL_ACCOUNT_NAME + ".azuredatalakestore.net/",
+  mount_point = "/mnt/adldrive",
+  extra_configs = configs)
+
+# COMMAND ----------
+
+dbutils.fs.ls("dbfs:/mnt/adldrive/")

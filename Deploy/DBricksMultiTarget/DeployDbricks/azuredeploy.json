@@ -1,0 +1,135 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dbricksLocation": {
+      "defaultValue": "[resourceGroup().location]",
+      "type": "string",
+      "metadata": {
+        "description": "Key Vault secret name which references the AD Service Principal password"
+      }
+    },
+    "dbricksWorkspaceName": {
+      "defaultValue": "[concat('dbricks', uniqueString(resourceGroup().id))]",
+      "type": "string"
+    },
+    "dbricksTier": {
+      "defaultValue": "premium",
+      "type": "string",
+      "allowedValues": [
+        "premium",
+        "standard"
+      ]
+    },
+    "keyVaultName": {
+      "type": "string",
+      "defaultValue": "[concat('keyVault', uniqueString(resourceGroup().id))]",
+      "metadata": {
+        "description": "Name of the Key Vault"
+      }
+    },
+    "keyVaultTenantId": {
+      "defaultValue": "[subscription().tenantId]",
+      "type": "string",
+      "metadata": {
+        "description": "Tenant Id for the subscription and use assigned access to the vault. Available from the Get-AzureRMSubscription PowerShell cmdlet"
+      }
+    },
+    "keyVaultSku": {
+      "defaultValue": "Standard",
+      "type": "string",
+      "allowedValues": [
+        "Standard",
+        "Premium"
+      ],
+      "metadata": {
+        "description": "SKU for the vault"
+      }
+    },
+    "keyVaultUserId": {
+      "type": "string",
+      "metadata": {
+        "description": "Object Id of the AD user. Get using az ad user show --upn jon@contoso.com --output json"
+      }
+    },
+    "keyVaultSpSecretName": {
+      "type": "string",
+      "defaultValue": "adlServicePrincipalPassword",
+      "metadata": {
+        "description": "Name of the secret in KeyVault to hold the AD Service Principal password"
+      }
+    }
+  },
+  "variables": {
+    "managedResourceGroupId": "[concat(subscription().id, '/resourceGroups/', variables('managedResourceGroupName'))]",
+    "managedResourceGroupName": "[concat('databricks-rg-', parameters('dbricksWorkspaceName'), '-', uniqueString(parameters('dbricksWorkspaceName'), resourceGroup().id))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-04-01",
+      "location": "[parameters('dbricksLocation')]",
+      "name": "[parameters('dbricksWorkspaceName')]",
+      "tags": {
+        "displayName": "Databricks Workspace"
+      },
+      "sku": {
+        "name": "[parameters('dbricksTier')]"
+      },
+      "properties": {
+        "ManagedResourceGroupId": "[variables('managedResourceGroupId')]"
+      },
+      "type": "Microsoft.Databricks/workspaces"
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "name": "[parameters('keyVaultName')]",
+      "apiVersion": "2015-06-01",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "KeyVault"
+      },
+      "properties": {
+        "enabledForDeployment": false,
+        "enabledForTemplateDeployment": true,
+        "enabledForVolumeEncryption": false,
+        "tenantId": "[parameters('keyVaultTenantId')]",
+        "accessPolicies": [
+          {
+            "tenantId": "[subscription().tenantId]",
+            "objectId": "[parameters('keyVaultUserId')]",
+            "permissions": {
+              "keys": [
+                "All"
+              ],
+              "secrets": [
+                "All"
+              ]
+            }
+          }
+        ],
+        "sku": {
+          "name": "[parameters('keyVaultSku')]",
+          "family": "A"
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "keyVaultName": {
+      "value": "[parameters('keyVaultName')]",
+      "type": "string"
+    },
+    "keyVaultSpSecretName": {
+      "value": "[parameters('keyVaultSpSecretName')]",
+      "type": "string"
+    },
+    "keyVaultSubscriptionId": {
+      "value": "[subscription().subscriptionId]",
+      "type": "string"
+    },
+    "dbricksLocation": {
+      "value": "[parameters('dbricksLocation')]",
+      "type": "string"
+    }
+  }
+}
