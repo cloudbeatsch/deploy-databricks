@@ -1,6 +1,9 @@
 # Introduction 
 The following deploys a PoC showing the ability to mount an [Azure Data Lake Store](https://azure.microsoft.com/en-us/services/data-lake-store/) to an [Azure Databricks](https://azure.microsoft.com/en-au/services/databricks/) workspace across two Azure tenants. It incorporates the use of [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) as the main storage of the AD Service Principal password during deployment. To demonstrate two ways ways of handling secrets within Azure Databricks, after deployment the service principal credentials are stored in a config notebook in the user's Azure Databricks workspace and in the Azure Databricks' Secret API (preview).
 
+#Architecture
+![Architecture](/Images/architecture.JPG?raw=true "Architecture")
+
 # Requirements
 - [Azure cli 2.0](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - [jq](https://stedolan.github.io/jq/)
