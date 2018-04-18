@@ -1,9 +1,9 @@
 {
-    "DatabricksResourceGroup": "lace-dbricks-rg-10",
+    "DatabricksResourceGroup": "databricks-rg",
     "DatabricksLocation": "east us 2",
-    "DatabricksSubscriptionId": "b6a69b21-5dea-4475-9cd5-e9f2f8eb1e27",
+    "DatabricksSubscriptionId": "SUBSCRIPTION_ID",
 
-    "DataLakeResourceGroup": "lace-adl-rg-10",
+    "DataLakeResourceGroup": "adl-rg",
     "DataLakeLocation": "east us 2",
-    "DataLakeSubscriptionId": "015f60da-d4b1-4dfc-93f5-bcb4a2f8add3"
+    "DataLakeSubscriptionId": "SUBSCRIPTION_ID"
 }

@@ -6,10 +6,19 @@
       "value": "Consumption"
     },
     "spName": {
-      "value": "laceAdlServicePrincipal03"
+      "value": "ADLServicePrincipal"
     },
     "spDlFolder": {
       "value": "/"
+    },
+    "kvName": {
+      "value": ""
+    },
+    "kvSubId": {
+      "value": ""
+    },
+    "kvSpSecretName": {
+      "value": ""
     }
   }
 }
