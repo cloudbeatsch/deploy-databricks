@@ -65,11 +65,11 @@ The following will deploy Azure Data Lake into the specified resource group and 
 4. Run `./deploy.sh` and fill in the prompts.
 
 ### C. Upload Databricks ADLMount-boostrapped notebooks into workspace
-The following will upload four Notebooks into the Azure Databricks workspace with the necessary scripts to mount Azure Data Lake to Azure Databricks. 
+The following will upload Notebooks into the Azure Databricks workspace with the necessary scripts to mount Azure Data Lake to Azure Databricks. 
 1. Configure Databricks CLI to point to the newly created Databricks workspace by running `databricks configure --token`. See here for more details: https://docs.azuredatabricks.net/user-guide/dev-tools/databricks-cli.html#set-up-authentication.
     - Note: There is currently an outstanding bug with Basic Authentication in the v0.6 of the Databricks CLI, so make sure you use Token Authentication instead.
 2. Navigate to **Deploy > DbricksMultiTarget > DeployDbricks > cluster**
-3. Run `./mountadl_confignb.sh` or `./mountadl_secret.sh`. This prompt you for the following:
+3. Run `./mountadl_confignb.sh` or `./mountadl_secret.sh`. The former uses the a config notebook to store the secrets while the latter makes use of the Azure Databricks Secrets API. When running either script, it will prompt you for the following:
     - Azure Data Lake account name
     - AD Service Principal name
     - AD Service Principal Client Id
@@ -79,10 +79,23 @@ The following will upload four Notebooks into the Azure Databricks workspace wit
     - Databricks region
     - *Optional*: Template folder path containing notebook templates
 
-- This will upload the following notebooks to the specified Databricks workspace:
-    - **config.py** - contains all configuration to mount ADL. Do not share this notebook!
-    - **mountadl_dbfs.py** - contains bootstap code to mount ADL via DBFS. See here for more info: https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-datalake.html#mount-azure-data-lake-stores-with-dbfs
-    - **mountadl_sparkApi.py** - contains bootstap code to mount ADL via Spark API. See here for more info: https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-datalake.html#access-azure-data-lake-store-using-the-spark-api
+- You may also pass these inline like below:
+
+        ./DeployDbricks/cluster/mountadl_secret.sh \
+            $dlName \
+            $spName \
+            $spClientId \
+            $spTenantId \
+            $kvName \
+            $kvSpSecretName \
+            $dbricksLocation \
+            $dbricksScope \
+            $dbricksNotebookTemplates
+
+- These scripts will upload the following notebooks to the specified Databricks workspace:
+    - **config.py** - contains all configuration to mount ADL. Do not share this notebook! Only used by `confignb`.
+    - **mountadl_<confignb/secret>_dbfs.py** - contains bootstap code to mount ADL via DBFS. See here for more info: https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-datalake.html#mount-azure-data-lake-stores-with-dbfs
+    - **mountadl_<confignb/secret>_sparkApi.py** - contains bootstap code to mount ADL via Spark API. See here for more info: https://docs.azuredatabricks.net/spark/latest/data-sources/azure/azure-datalake.html#access-azure-data-lake-store-using-the-spark-api
 
 ### D. Optional: Create cluster to run notebooks
 
