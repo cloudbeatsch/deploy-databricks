@@ -89,13 +89,24 @@ echo "Creating resource group: $rgName"
 az group create --name "$rgName" --location "$rgLocation"
 
 echo "Deploying resources into $rgName"
-armOutput=$(az group deployment create \
-    --name "$deployName" \
-    --resource-group "$rgName" \
-    --template-file "$templateFile" \
-    --parameters @"$parametersFile" \
-    --parameters $overrideParams \
-    --output json)
+if [[ -z $overrideParams ]]; then
+    armOutput=$(az group deployment create \
+        --name "$deployName" \
+        --resource-group "$rgName" \
+        --template-file "$templateFile" \
+        --parameters @"$parametersFile" \
+        --output json \
+        --verbose)
+else
+    armOutput=$(az group deployment create \
+        --name "$deployName" \
+        --resource-group "$rgName" \
+        --template-file "$templateFile" \
+        --parameters @"$parametersFile" \
+        --parameters $overrideParams \
+        --output json \
+        --verbose)
+fi
 
 if [[ -z $armOutput ]]; then
     echo >&2 "ARM deployment failed." 

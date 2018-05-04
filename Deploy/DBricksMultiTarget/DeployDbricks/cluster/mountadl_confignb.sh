@@ -30,7 +30,7 @@
 set -o errexit
 set -o pipefail
 set -o nounset
-set -o xtrace
+# set -o xtrace
 
 _timestamp=$(date +%s)
 _defaultTemplatePath="./notebookTemplates"
@@ -57,6 +57,14 @@ _main() {
 
     while [[ -z $spName ]]; do
         read -rp "Enter AD Service Principal name: " spName
+    done
+
+    while [[ -z $spClientId ]]; do
+        read -rp "Enter AD Service Principal Client Id: " spClientId
+    done
+
+    while [[ -z $spTenantId ]]; do
+        read -rp "Enter AD Service Principal Tenant Id: " spTenantId
     done
 
     while [[ -z $kvName ]]; do

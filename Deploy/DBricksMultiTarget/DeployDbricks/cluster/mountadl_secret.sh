@@ -63,6 +63,14 @@ _main() {
         read -rp "Enter AD Service Principal name: " spName
     done
 
+    while [[ -z $spClientId ]]; do
+        read -rp "Enter AD Service Principal Client Id: " spClientId
+    done
+
+    while [[ -z $spTenantId ]]; do
+        read -rp "Enter AD Service Principal Tenant Id: " spTenantId
+    done
+
     while [[ -z $kvName ]]; do
         read -rp "Enter KeyVault name where AD Service principal password is stored: " kvName
     done
@@ -77,7 +85,7 @@ _main() {
 
     if [[ ! $scope ]]; then
         read -rp "Enter name of the Databricks scope to store Azure Data Lake secrets (Default: $_defaultScope): " scope
-        [[ -n $scope ]] || templatePath=$_defaultScope
+        [[ -n $scope ]] || scope=$_defaultScope
     fi
 
     if [[ ! $templatePath ]]; then
